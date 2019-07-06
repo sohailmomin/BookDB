@@ -1,0 +1,20 @@
+{% load static %}
+{% if books.count > 0 and not flg %}
+{% for book in books  %}
+	<li class="list-group-item col-md-offset-3">
+		<a href="{{book.get_absolute_url}}">
+		<span>
+		<img src="{% static book.image.url%}" width="30px" height="30px">&nbsp;
+		{{book.title}}
+	</span>
+	</a>
+	</li>
+{% endfor %}
+{% else %}
+	{% if flg %}
+	    
+		<li>No results found</li>   
+	{% endif %}
+	 
+
+{% endif %}

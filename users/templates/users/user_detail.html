@@ -1,0 +1,117 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<br>
+	<div class="row">
+		
+			
+    <div class="center-block" style="width:500px;border: 1px solid #333; padding:30px;">
+    	 <div class="row">
+  <div class="col-sm-4">{% load staticfiles%}
+			<span><img class="img-circle" src="{% static user.image.url %}"></span>
+			
+	 
+    	<span><h3 style="font-family: 'Lato', sans-serif;">{{user.username}}</h3></span></div>
+  <div class="col-sm-4">
+
+  	<small><strong style="font-family: 'Roboto', sans-serif;">Details:</strong>Age:{{user.age}}
+
+  			<br><strong style="font-family: 'Roboto', sans-serif;">About: </strong>{{user.about}}
+  	</small> 
+
+
+  </div>
+  
+
+			
+    	 
+    		
+    		
+    	</div>
+    	
+    </div>
+</div>
+<hr >
+    
+
+    	
+    	<span class="total">{{user.followers.count}}</span> 
+    	<span> follower{{users.followers.count|pluralize}}</span>
+
+    	<a href="#" id="{{user.id}}" action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow btn btn-primary">
+    		{% if request.user not in user.followers.all %}
+    				Follow
+    		{% else %}
+    		    UnFollow
+    		   {% endif %}
+
+    	</a> 
+    	<br><br>
+    	<hr>
+    	<h2 style="font-family: 'Roboto', sans-serif;
+font-family: 'Playfair Display SC', serif;">Reviews by User</h2>
+    	<ul>
+    	{% for r in user.reviews.all %}
+    		<li><span><a href="{{r.book.get_absolute_url}}#review-{{r.id}}">{{r.book.title}}</a></span>
+    			<br>
+    			 
+    		</li>
+    		
+    	{% endfor %}
+    	</ul>
+    	  
+    	 
+
+
+        
+ 
+{% endblock content %}
+
+{% block domready %}
+    $(document).ready(function(){
+
+
+    $('.follow').click(function(e){
+ e.preventDefault();
+ 
+ $.post('{% url "user_follow" %}',
+ {
+ id: $(this).attr('id'),
+ action: $(this).attr('action')
+ },
+ function(data){
+
+ if (data['status'] == 'ok') {
+ var previous_action = $('.follow').attr('action');
+
+ // toggle data-action
+ $('.follow').data('action',
+ previous_action == 'follow' ? 'unfollow' : 'follow');
+ // toggle link text
+ $('.follow').text(
+ previous_action == 'follow' ? 'Unfollow' : 'Follow');
+
+ // update total followers
+ var previous_followers = parseInt(
+ $('.total').text());
+ $('.total').text(previous_action == 'follow' ?
+previous_followers + 1 : previous_followers - 1);
+ }
+ }
+ );
+ });
+
+
+
+  
+ });
+
+
+
+
+
+
+	
+
+
+{% endblock domready %}

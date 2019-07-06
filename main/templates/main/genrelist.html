@@ -1,0 +1,18 @@
+{% extends "main/base.html" %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/genrelist.css'%}">
+
+
+{% block content %}
+<ul class="list-group">
+	{% for genre in genres  %}
+	<li class="list-group-item"><span><a href="{% url 'genredetail' genre.id %}" style="color:#086862;">{{genre.name}}</a></span>&nbsp;<span>
+		({{g.genred.count}})
+	</span>
+		
+		
+	</li>
+		
+	{% endfor %}
+</ul>
+{% endblock %}

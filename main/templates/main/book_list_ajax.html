@@ -1,0 +1,31 @@
+<table width="1200px" cellpadding="30px" cellspacing="5" border="5px black solid">
+     	<tr style="font-family: 'Courgette', cursive;
+font-family: 'Playfair Display', serif;">
+     		<th>&nbsp;Cover</th>
+     		<th>&nbsp;Title</th>
+     		<th>&nbsp;Author</th>
+     		<th>&nbsp;ISBN</th>
+     		<th>&nbsp;<i class="material-icons">shopping_cart</i></th>
+     		<hr>
+     	</tr>
+     	{% for book in books  %}
+     		<tr> 
+                    {% load static %}
+     			<td><a href="{{book.get_absolute_url}}"><img src='{% static book.image.url %}' height="90px" width="90px"></a></td>
+     			<td style="font-family: 'Poppins', sans-serif;
+               font-family: 'Lato', sans-serif;"><a href="{{book.get_absolute_url}}">&nbsp;{{book.title}}</a><br>
+     				<small>
+     					{% for g in book.genre.all %}
+     				<span ><a href="{{g.get_absolute_url}}" style="font-family: 'Bitter', serif;">&nbsp;{{g.name}}&nbsp;</a></span>
+     			{%endfor%}
+     				</small>
+     			</td>
+     			{% for a in book.author.all %}
+     				<td style="font-family: 'Poppins', sans-serif;"><a href="{{a.get_absolute_url}}">&nbsp;{{a.name}}</a></td>
+     			{%endfor%}
+     			<td>{{book.isbn}}</td>
+     			<td>&nbsp;</strong><br>&nbsp;<a href="{{book.amazon}}"><img src="{% static 'images/amazon.png' %}" width="30px" height="30px"></a></span></td>
+     		</tr>
+     		
+     	{% endfor %}
+</table>

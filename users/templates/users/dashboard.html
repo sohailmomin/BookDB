@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-offset-5">
+			<h3 style="font-family: 'Playfair Display', serif;">DashBoard</h3>
+		</div>
+
+	</div>
+	<hr style="border: 0.5px solid;">
+    <ul class="list-group">
+    	{% for action in actions  %}
+    	<li class="list-group-item">
+            <span>
+                <img src="{% static user.image.url %}" width="30px" height="40px">
+            <strong>{{action.user.username}}</strong><br>{{action.verb}}<br>At:-{{action.created}}
+    		<br>{{action.target_ct}}<br><a href="{{action.target.book.get_absolute_url}}#review-{{action.target.id}}" style="color:#3AA48C;">{{action.target.book.title}}</a>
+            </span>
+    	</li>
+    		
+    	{% endfor %}
+    </ul>
+{% endblock content %}

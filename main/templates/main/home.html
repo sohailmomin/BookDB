@@ -1,0 +1,73 @@
+{% extends 'main/base.html' %}
+{% load staticfiles %}
+{% block javas %}
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" /> <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"> </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+{% endblock javas %}
+
+
+
+	 
+</style>
+
+
+
+
+{% block content %}
+  <div id="booklist">
+      {% include "main/book_list_ajax.html" %}
+  </div>
+
+  {% if books.has_next %}
+    <a class="infinite-more-link" href="?page={{ books.next_page_number }}">More</a>
+  {% endif %}
+
+   
+
+  <div class="loading" style="display: none;">
+    Loading...
+  </div>
+
+
+
+   
+{% endblock %}
+
+{% block domready %}
+
+
+
+    $(document).ready(function(){
+    var page = 1;
+    var empty_page=false;
+    var block_request=false;
+
+    $(window).scroll(function() {
+    
+ var margin = $(document).height() - $(window).height() - 200;
+ if ($(window).scrollTop() > margin && empty_page == false && block_request == false) {
+ block_request = true;
+ page += 1;
+ $.get('?page=' + page, function(data) {
+ if(data == '') {
+ empty_page = true;
+ }
+ else {
+ block_request = false;
+ $('#booklist').append(data);
+ console.log('data')
+ }
+ });
+ }
+ });
+
+
+
+
+
+});
+
+        
+
+
+
+{% endblock domready %}

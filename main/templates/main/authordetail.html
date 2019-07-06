@@ -1,0 +1,63 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content %}
+ <div class="row">
+ 	<div class="col-md-3">
+ 		<img src="{% static author.image.url %}" width="200px" height="200px">
+ 		
+ 	</div>
+ 	<div class="col-md-5">
+ 		<h3 style="font-family: 'Lato', sans-serif;">{{author.name}}</h3>
+ 		<hr style="border: 0.5px solid;">
+ 		 
+
+ 		<small style="font-family: 'Montserrat', sans-serif;">
+ 			<strong>Born:&nbsp;</strong>{{author.birthdate}} {{author.birth_place}}<br>
+ 			<strong>Website:&nbsp;</strong><a href="{{author.website}}">{{author.website}}</a><br>
+ 			<strong>Twitter:&nbsp;</strong><a href="{{author.twitter}}">{{author.twitter}}</a>
+ 		</small>
+ 		<br>
+ 		<p style="font-family: 'Lato', sans-serif;">
+ 			{{author.about|linebreaks}}
+ 		</p>
+ 		
+ 	</div>
+ 	
+ </div>
+<hr style="border: 0.5px solid;">
+
+<p style="font-family: 'Nunito', sans-serif;">Number of Books:&nbsp;{{author.authored.count}}</p>
+    	<table width="1200px" cellpadding="30px" cellspacing="5" border="5px black solid">
+        <tr style="font-family: 'Courgette', cursive;
+font-family: 'Playfair Display', serif;">
+            <th>&nbsp;Cover</th>
+            <th>&nbsp;Title</th>
+            <th>&nbsp;Author</th>
+            <th>&nbsp;ISBN</th>
+            <th>&nbsp;Amazon Store</th>
+            <hr>
+        </tr>
+        {% for book in author.authored.all  %}
+            <tr> 
+                    {% load static %}
+                <td><a href="{{book.get_absolute_url}}"><img src='{% static book.image.url %}' height="90px" width="90px"></a></td>
+                <td style="font-family: 'Poppins', sans-serif;
+               font-family: 'Lato', sans-serif;"><a href="{{book.get_absolute_url}}">&nbsp;{{book.title}}</a><br>
+                    <small>
+                        {% for g in book.genre.all %}
+                    <span style="font-family: 'Courgette', cursive; color: rgb(100,55,0)"><a href="{{g.get_absolute_url}}">&nbsp;{{g.name}}&nbsp;</a></span>
+                {%endfor%}
+                    </small>
+                </td>
+                {% for a in book.author.all %}
+                    <td style="font-family: 'Poppins', sans-serif;"><a href="{{a.get_absolute_url}}">&nbsp;{{a.name}}</a></td>
+                {%endfor%}
+                <td>{{book.isbn}}</td>
+                <td>&nbsp;</strong><br>&nbsp;<a href="{{book.amazon}}"><img src="{% static 'images/amazon.png' %}" width="30px" height="30px"></a></span></td>
+            </tr>
+            
+        {% endfor %}
+</table>
+    </div>
+ 		
+{% endblock content %}

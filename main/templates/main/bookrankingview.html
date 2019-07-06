@@ -1,0 +1,35 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    
+
+<table width="1200px" cellpadding="30" cellspacing="5" border="5px black solid">
+     	<tr>
+
+     		<th>Cover</th>
+     		<th>Title</th>
+     		<th>Author</th>
+     		<th>ISBN</th>
+     		<th>Amazon Store</th>
+     		<hr>
+     	</tr>
+     	{% for book in books  %}
+     		<tr>
+     			<td><a href="{{book.get_absolute_url}}"><img src='#' height="90px" width="90px"></a></td>
+     			<td><a href="{{book.get_absolute_url}}">{{book.title}}</a><br>
+     				<small>
+     					{% for g in book.genre.all %}
+     				<span style="font-style: italic;">{{g.name}}</span>
+     			{%endfor%}
+     				</small>
+     			</td>
+     			{% for a in book.author.all %}
+     				<td>{{a.name}}</td>
+     			{%endfor%}
+     			<td>{{book.isbn}}</td>
+     			<td><a href="{{book.amazon}}">get a copy</a></td>
+     		</tr>
+     		
+     	{% endfor %}
+</table>
+{% endblock content %}

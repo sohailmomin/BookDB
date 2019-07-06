@@ -1,0 +1,8 @@
+ul{
+		list-style-image: url({% static 'images/logo.png' %});
+		font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+	}
+	a{
+		color: green;
+
+	}

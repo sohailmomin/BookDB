@@ -1,0 +1,147 @@
+{% extends  'main/base.html'%}
+{% load static %}
+{% load humanize %}
+
+
+{% block content %}
+ 
+	<div class="fluid-container">
+	<div class="row " style="border: 1px solid #333;">
+		  
+		<div class="col-md-4" style="padding-top:50px;">
+			<img src="http://127.0.0.1:8000/static/{{book.image.url}}" class="img-responsive" width="250px">
+			
+		</div>
+		<div class="col-md-4 text-center">
+
+			
+			<h3>{{book.title}}</h3>
+			<p><strong>Author:-</strong>
+
+				{% for a in book.author.all %}
+					<span><a href="{{a.get_absolute_url}}">{{a.name}}</a></span>
+				{% endfor %}
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<small>
+				{% if rating %}
+				<strong>Average Ratings:&nbsp;&nbsp;</strong>{{rating}}
+				    
+				{% else %}
+				    <strong>Not rated</strong>
+				{% endif %}
+				</small>
+			</p>
+			<small style="font-family: 'Lato', sans-serif;">
+				{{book.description|linebreaks}}
+			</small>
+			<br><br>
+			<small>
+				<span><strong>ISBN:</strong>{{book.isbn}}</span>
+				<br>
+				<span><strong>Published:</strong>{{book.published|date:"F d Y"}}</span>
+				<br>
+				<span><strong>Publication:</strong>{{book.publication.name}}</span>
+				<br>
+				<span><strong>Get a Copy:</strong><br><a href="{{book.amazon}}"><img src="{% static 'images/amazon.png' %}" width="30px" height="30px"></a></span>
+				<br>
+				<span class="total"><strong>{{ total_views }}</strong></span>
+ 				view{{ total_views|pluralize }}
+
+			</small>
+			
+		</div>
+<div class="col-md-3">
+		 	
+		 </div>
+	
+ 
+</div>
+ 
+
+<br><br><hr style="border-top: 1px solid 231f1f;">
+
+{% if flg1 %}
+    
+<p><a href="{% url 'review_add' book.id %}">Add a review</a></p>
+{% else %}
+    <p>You have added a <a href="#review-{{ur.id}}">review</a></p>
+{% endif %}
+
+<p><strong style="font-family: 'Playfair Display', serif;">Reviews:<br></strong></p>
+
+<div class="fluid-container">
+	<ul class="list-group">
+	{% for review in book.reviews.all  %}
+	
+		<li class="list-group-item" style="font-family: 'Poppins', sans-serif;">
+			<span>
+				<strong><a href="{{review.user.get_absolute_url}}" style="color: #086862;">
+					<img src="{% static review.user.image.url%}" width="30px" height="30px">&nbsp;&nbsp;
+				{{review.user.username}}</a></strong> 
+				rated it <strong>{{review.ratings}}&nbsp;&nbsp;&nbsp;</strong>
+				<em style="float:right;">{{review.created}}</em>
+			</span>
+			
+			<p id="review-{{review.id}}">{{review.detail|linebreaks}}</p><br>
+			
+		<small><strong>User: </strong>{{review.user.username}}</small>
+		<br>
+		<small><strong>At: </strong>{{review.created}}<br>
+			<div class="like">
+				<span class="total" id="total-{{review.id}}">{{review.votes}}</span>
+			     people found it useful.
+			   <br><br>
+
+			   {% if user.is_authenticated  %}
+			   	{%  if request.user not in review.users_like.all %}
+
+			   	    
+			   	<a href="#" data-id="{{review.id}}" class="btn  btn-sm like" style="color:#086862;">Like</a>
+			   	 
+			    
+			       
+			      {% else %}
+			          	<strong> You have liked this review</strong>
+			   {% endif %}
+			   {% endif %}
+			
+		</small>
+
+
+	</li>
+		<hr>
+	</div>
+		
+	
+	{% endfor %}
+	</ul>
+
+</div>
+
+{% endblock %}
+
+{% block domready %}
+$(document).on("click",".like",
+	function(e)
+	{
+	 e.preventDefault();
+	
+	var rid;
+    rid = $(this).attr("data-id");
+    $.get('/like/', {id: rid}, function(data){
+    	if(data > 0)
+    	{
+    		var id='#total-'+rid;
+    		console.log(id);
+    		$(id).html(data);
+    	}
+        
+              
+    });
+
+
+
+
+	});
+    
+{% endblock domready %}

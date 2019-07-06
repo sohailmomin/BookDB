@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+
+	<div class="col-md-offset-2">
+		<h3 style="font-family: 'Playfair Display', serif;">{{flatpage.title}}</h3>
+		<hr>
+	<img src="{% static 'images/About.jpg' %}">
+	</div>
+</div>
+<br><br>
+<div class="row" style="font-family: 'Roboto', sans-serif;
+	 font-size:20px;
+" >
+	<div class="col-md-offset-4">
+		<p>{{flatpage.content|linebreaks}}</p>
+	</div>
+	
+</div>
+    
+    
+{% endblock content %}

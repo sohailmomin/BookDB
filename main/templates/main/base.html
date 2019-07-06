@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>BookDB</title>
+  <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{% load static %}
+  {% load humanize %}
+	<link rel="icon" type="image/ico" href="{% static 'images/logo.png' %}" />
+
+   
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Playfair+Display+SC|Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Anton&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Courgette&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Courgette|Playfair+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Arvo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css?family=Bitter&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+{% block javas %}
+     
+{% endblock javas %}
+	 
+   
+ 
+</head>
+<body style="background-color:#F9F7F4;">
+  <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header" style="font-family: 'Anton', sans-serif;">
+      <a class="navbar-brand" href="{% url 'home' %}"><i class="material-icons">
+book
+</i>BookDB</a>
+    </div>
+    <ul class="nav navbar-nav" style="font-family: 'Playfair Display', serif;">
+      <li class="active"><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'authorlist' %}">Authors</a></li>
+      <li><a href="{% url 'genrelist'%}">Genres</a></li>
+
+      <li><a href="{% url 'about' %}">About</a></li>
+    </ul>
+     <div class="content d-flex flex-column justify-content-center align-items-center">
+    <form class="navbar-form navbar-left">
+      <input type="text" name="search" id="search" placeholder="search books">
+    </form>
+    <!--<ul id="search-results">
+      {% include 'main/ajax_search.html' %}
+      
+    </ul> -->
+    
+    <ul class="nav navbar-nav navbar-right" style="font-family: 'Arvo', serif;">
+      {% if not request.user.is_authenticated %}
+      
+      <li><a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>    
+      <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-out"></span>Login</a></li>
+      {% else %}
+
+          <li><a href="#"><span class="glyphicon glyphicon-user"></span>
+            {{request.user.username}} &nbsp;&nbsp;
+          Profile</a></li> 
+         <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span>Logout</a></li>
+         <li><a href="{% url 'dashboard' %}"><span class="glyphicon glyphicon-log-in"></span>Dashboard</a></li> 
+      {% endif %}
+      
+      
+    </ul>
+  </div>
+</nav>
+	 <div class="row">
+    <ul id="search-results" class="list-group">
+      {% include 'main/ajax_search.html' %}
+      
+    </ul>
+     
+   </div> 
+  
+{% block content %}
+
+
+{%endblock%}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/
+jquery.min.js"></script>
+<script src=" http://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.
+cookie.min.js "></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+<script>
+jQuery.curCSS = function(element, prop, val) {
+    return jQuery(element).css(prop, val);
+};
+var csrftoken = $.cookie('csrftoken');
+ function csrfSafeMethod(method) {
+ // these HTTP methods do not require CSRF protection
+ return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+ }
+ $.ajaxSetup({
+ beforeSend: function(xhr, settings) {
+ if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+ xhr.setRequestHeader("X-CSRFToken", csrftoken);
+ }
+ }
+ });
+
+ $(document).on("keyup","#search",
+  function (e) {
+    e.preventDefault();
+    $.post('{% url 'search' %}'
+        ,{
+          search_text:$("#search").val()
+        },
+        function(data)
+        {
+          if((e.keyCode === 8 || e.keyCode === 46) && $("#search").val() == '')
+          {
+            $("#search-results").html('');
+          }
+
+          else
+          {
+            $("#search-results").html(data);
+          }
+          
+        }
+
+      )
+  });
+
+  
+ {% block domready %}
+ {% endblock %}
+
+ 
+ 
+</script>
+<!--
+<div class="main-footer">
+        <div class="container text-center">
+            <ul>
+                <li><a href="#">Source Code</a></li>
+                <li><a href="#">OverIQ</a></li>
+                <li><a href="#">EULA</a></li>
+            </ul>
+        </div>
+    </div>
+</footer> -->
+</body>
+</html>

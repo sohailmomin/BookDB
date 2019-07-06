@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content %}
+    <table width="1200px" cellpadding="15" cellspacing="5" border="5px #9fb0b7 inset ">
+    	<tr>
+    		<th>Image</th>
+    		<th>Name</th>
+    		<th>Birthplace</th>
+    		<th>website</th>
+    		<th>twitter</th>
+
+    	</tr>
+    	{% for author in authors  %}
+    	<tr>
+
+    		<td><img src="{% static author.image.url %}" height="90px" width="90px"></td>
+    		<td><a href="{{ author.get_absolute_url }}">{{author.name}}</a></td>
+    		<td>{{author.birth_place}}</td>
+    		<td><a href="{{author.website}}">{{author.website}}</a></td>
+    		<td><a href="{{author.twitter}}">{{author.twitter}}</a></td>
+    		</tr>
+    	{% endfor %}
+    </table>
+{% endblock content %}
